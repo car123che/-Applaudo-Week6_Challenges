@@ -9,11 +9,9 @@ namespace MoviRentalApi.Controllers
     [Route("[controller]")]
     public class TagController : ControllerBase
     {
-        private readonly ILogger<TagController> _logger;
         private readonly ITagRepository  _tagService;
-        public TagController(ILogger<TagController> logger, ITagRepository tagService)
-        {
-            _logger = logger;
+        public TagController( ITagRepository tagService)
+        { 
             _tagService = tagService;
         }
 
