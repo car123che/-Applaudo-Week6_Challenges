@@ -9,12 +9,10 @@ namespace MoviRentalApi.Controllers
     [Route("[controller]")]
     public class SellController : ControllerBase
     {
-        private readonly ILogger<SellController> _logger;
         private readonly ISellRepository _sellService;
 
-        public SellController(ILogger<SellController> logger, ISellRepository sellService)
+        public SellController( ISellRepository sellService)
         {
-            _logger = logger;
             _sellService = sellService;
         }
 

@@ -1,7 +1,6 @@
 ﻿using EFMovieRentalDomain.Models;
 using Microsoft.AspNetCore.Mvc;
 using MovieRental.Domain;
-using MoviRentalApi.Models;
 
 namespace MoviRentalApi.Controllers
 {
@@ -9,12 +8,10 @@ namespace MoviRentalApi.Controllers
     [Route("[controller]")]
     public class MovieTagController : ControllerBase
     {
-        private readonly ILogger<MovieTagController> _logger;
         private readonly IMovieTagRepository _movieTagService;
 
-        public MovieTagController(ILogger<MovieTagController> logger, IMovieTagRepository movieTagService)
+        public MovieTagController( IMovieTagRepository movieTagService)
         {
-            _logger = logger;
             _movieTagService = movieTagService;
         }
 
@@ -33,16 +30,16 @@ namespace MoviRentalApi.Controllers
         }
 
         [HttpPost]
-        public async Task<string> Post([FromBody] MovieTagData movieTagData)
+        public async Task<string> Post([FromBody] EFMovieRentalDomain.MovieTag movieTagData)
         {
-            var response = await _movieTagService.Post(movieTagData.moveiId, movieTagData.tagId);
+            var response = await _movieTagService.Post(movieTagData.MovieId, movieTagData.TagId);
             return response;
         }
 
         [HttpDelete]
-        public async Task<string> Delete([FromBody] MovieTagData movieTagData)
+        public async Task<string> Delete([FromBody] EFMovieRentalDomain.MovieTag movieTagData)
         {
-            var response = await _movieTagService.Delete(movieTagData.moveiId, movieTagData.tagId);
+            var response = await _movieTagService.Delete(movieTagData.MovieId, movieTagData.TagId);
             return response;
         }
     }

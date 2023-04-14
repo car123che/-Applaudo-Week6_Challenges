@@ -8,12 +8,10 @@ namespace MoviRentalApi.Controllers
     [Route("[controller]")]
     public class UserController : ControllerBase
     {
-        private readonly ILogger<UserController> _logger;
         private readonly IUserRepository _userService;
 
-        public UserController(ILogger<UserController> logger, IUserRepository userService)
+        public UserController( IUserRepository userService)
         {
-            _logger = logger;
             _userService = userService;
         }
 
@@ -32,16 +30,8 @@ namespace MoviRentalApi.Controllers
         }
 
         [HttpPost]
-        public async Task<EFMovieRentalDomain.User> Post([FromBody] UserData userData)
+        public async Task<EFMovieRentalDomain.User> Post([FromBody] EFMovieRentalDomain.User newUser)
         {
-            var newUser = new EFMovieRentalDomain.User()
-            {
-               Name = userData.Name,
-               Age = userData.Age,
-               Email = userData.Email,
-               Phone = userData.Phone,
-            };
-
             var user = await _userService.Post(newUser);
             return user;
         }
@@ -55,16 +45,8 @@ namespace MoviRentalApi.Controllers
 
 
         [HttpPut]
-        public async Task<string> Put(int Id, [FromBody] UserData userData)
+        public async Task<string> Put(int Id, [FromBody] EFMovieRentalDomain.User newUser)
         {
-            var newUser = new EFMovieRentalDomain.User()
-            {
-                Name = userData.Name,
-                Age = userData.Age,
-                Email = userData.Email,
-                Phone = userData.Phone,
-            };
-
             var response = await _userService.Update(Id, newUser);
             return response;
         }

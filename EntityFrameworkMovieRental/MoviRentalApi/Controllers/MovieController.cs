@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MovieRental.Domain;
-using MoviRentalApi.Models;
 
 namespace MoviRentalApi.Controllers
 {
@@ -8,12 +7,10 @@ namespace MoviRentalApi.Controllers
     [Route("[controller]")]
     public class MovieController : ControllerBase
     {
-        private readonly ILogger<MovieController> _logger;
         private readonly IMovieRepository _movieService;
 
-        public MovieController(ILogger<MovieController> logger, IMovieRepository movieService)
+        public MovieController( IMovieRepository movieService)
         {
-            _logger = logger;
             _movieService = movieService;
         }
 
@@ -33,19 +30,8 @@ namespace MoviRentalApi.Controllers
 
 
         [HttpPost]
-        public async Task<EFMovieRentalDomain.Movie> Post([FromBody] MovieData movieData)
+        public async Task<EFMovieRentalDomain.Movie> Post([FromBody] EFMovieRentalDomain.Movie newMovie)
         {
-            var newMovie = new EFMovieRentalDomain.Movie()
-            {
-                Title = movieData.Title,
-                Description = movieData.Description,
-                PosterStock = movieData.PosterStock,
-                TrailerLink = movieData.TrailerLink,
-                SalePrice = movieData.SalePrice,
-                Likes = movieData.Likes,
-                Availability = movieData.Availability
-            };
-
             var movie = await _movieService.Post(newMovie);
             return movie;
         }
@@ -58,19 +44,8 @@ namespace MoviRentalApi.Controllers
         }
 
         [HttpPut]
-        public async Task<string> Put(int Id, [FromBody] MovieData movieData)
+        public async Task<string> Put(int Id, [FromBody] EFMovieRentalDomain.Movie newMovie)
         {
-            var newMovie = new EFMovieRentalDomain.Movie()
-            {
-                Title = movieData.Title,
-                Description = movieData.Description,
-                PosterStock = movieData.PosterStock,
-                TrailerLink = movieData.TrailerLink,
-                SalePrice = movieData.SalePrice,
-                Likes = movieData.Likes,
-                Availability = movieData.Availability
-            };
-
             var response = await _movieService.Update(Id, newMovie);
             return response;
         }

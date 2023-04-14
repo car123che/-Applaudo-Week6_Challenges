@@ -10,12 +10,10 @@ namespace MoviRentalApi.Controllers
     [Route("[controller]")]
     public class RentController : ControllerBase
     {
-        private readonly ILogger<RentController> _logger;
         private readonly IRentRepository _rentService;
 
-        public RentController(ILogger<RentController> logger, IRentRepository rentService)
+        public RentController( IRentRepository rentService)
         {
-            _logger = logger;
             _rentService = rentService;
         }
 
