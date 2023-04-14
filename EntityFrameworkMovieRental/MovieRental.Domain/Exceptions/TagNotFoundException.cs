@@ -13,5 +13,10 @@ namespace MovieRental.Domain.Exceptions
         {
             
         }
+
+        public TagNotFoundException()
+        {
+            
+        }
     }
 }

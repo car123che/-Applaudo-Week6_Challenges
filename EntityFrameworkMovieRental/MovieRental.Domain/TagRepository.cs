@@ -6,9 +6,10 @@ using System.Threading.Tasks;
 using EFUnivestityRentalData;
 using Microsoft.EntityFrameworkCore;
 using MovieRental.Domain.Exceptions;
+using MovieRental.Domain.Storage;
 
 namespace MovieRental.Domain
-{
+{ 
     public interface ITagRepository
     {
         Task<EFMovieRentalDomain.Tag> Post(string Name);
@@ -20,61 +21,47 @@ namespace MovieRental.Domain
 
     public class TagRepository : ITagRepository
     {
-        private static MovieRentalContext context = new MovieRentalContext();
+        private readonly ITagStorage _tagStorage;
+
+        public TagRepository(ITagStorage tagStorage)
+        {
+            _tagStorage = tagStorage;
+        }
+
         public async Task<List<EFMovieRentalDomain.Tag>> Get()
         {
-            var tags = await context.Tags.ToListAsync();
+            var tags = await _tagStorage.GetAllTags();
             return tags;
         }
+
         public async Task<EFMovieRentalDomain.Tag> Get(int Id)
         {
-            var tag = await context.Tags.FindAsync(Id);
+            var tag = await _tagStorage.GetOneTag(Id);
 
             if(tag is null)
-            {
                 throw new TagNotFoundException($"Tag Id: {Id} - not Found");
-            }
-
 
             return tag;
         }
+        
         public async Task<EFMovieRentalDomain.Tag> Post(string Name)
         {
-            var tag = new EFMovieRentalDomain.Tag() { Name = Name };
-            await context.AddAsync(tag);
-
-            await context.SaveChangesAsync();
-
+            var tag = await _tagStorage.SaveATag(Name);
             return tag;
         }
+
+
         public async Task<string> Delete(int Id)
         {
-            var tag = await context.Tags.FindAsync(Id);
-
-            if (tag is null)
-            {
-                throw new TagNotFoundException($"Tag Id: {Id} - not Found");
-            }
-
-            context.Tags.Remove(tag);
-            await context.SaveChangesAsync();
-
+            var tag = await _tagStorage.DeleteTag(Id);
             return $"Tag: {tag.Name} - eliminada";
         }
+
+
         public async Task<string> Update(int Id, string newName)
         {
-            var tag = await context.Tags.FindAsync(Id);
-
-            if (tag is null)
-            {
-                throw new TagNotFoundException($"Tag Id: {Id} - not Found");
-            }
-
-
-            tag.Name = newName;
-            await context.SaveChangesAsync();
-
-            return $"Tag modificada correctamente";
+            var tag = await _tagStorage.UpdateTag(Id, newName);
+            return $"Tag: {tag.Name} - modificada correctamente";
         }
 
     }
