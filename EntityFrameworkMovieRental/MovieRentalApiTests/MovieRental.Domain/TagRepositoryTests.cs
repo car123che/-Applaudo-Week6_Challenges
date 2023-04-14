@@ -50,7 +50,6 @@ namespace MovieRentalApiTests.MovieRental.Domain
 
         }
 
-
         [Test]
         public async Task GetTagById_WhenIdExits_ReturnTag()
         {
