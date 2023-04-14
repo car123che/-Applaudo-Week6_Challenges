@@ -21,7 +21,7 @@ namespace MovieRental.Domain.Storage
 
     public class TagStorage : ITagStorage
     {
-        private static MovieRentalContext context = new MovieRentalContext();
+        private  MovieRentalContext context = new MovieRentalContext();
 
         public async Task<List<EFMovieRentalDomain.Tag>> GetAllTags()
         {

@@ -2,6 +2,7 @@
 using EFUnivestityRentalData;
 using Microsoft.EntityFrameworkCore;
 using MovieRental.Domain.Exceptions;
+using MovieRental.Domain.Storage;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,65 +22,43 @@ namespace MovieRental.Domain
 
     public class UserRepository : IUserRepository
     {
-        private static MovieRentalContext context = new MovieRentalContext();
+        private readonly IUserStorage _userStorage;
+
+        public UserRepository(IUserStorage userStorage)
+        {
+            _userStorage = userStorage;
+        }
         public async Task<string> Delete(int Id)
         {
-            var user = await context.Users.FindAsync(Id);
-
-            if (user is null)
-            {
-                throw new UserNotFoundException($"User {Id} - Not Found");
-            }
-
-            context.Users.Remove(user);
-            await context.SaveChangesAsync();
-
+            var user = await _userStorage.Delete(Id);
             return $"User: {user.Name} - deleted";
         }
 
         public async Task<List<User>> Get()
         {
-            var users = await context.Users.ToListAsync();
+            var users = await _userStorage.Get();
             return users;
         }
 
         public async Task<User> Get(int Id)
         {
-            var user = await context.Users.FindAsync(Id);
+            var user = await _userStorage.Get(Id);
 
             if (user is null)
-            {
-                throw new MovieNotFoundException($"user {Id} - Not Found");
-            }
+                throw new UserNotFoundException($"user {Id} - Not Found");
 
             return user;
         }
 
         public async Task<User> Post(User newUser)
         {
-            await context.AddAsync(newUser);
-
-            await context.SaveChangesAsync();
-
-            return newUser;
+            var user = await _userStorage.Post(newUser);
+            return user;
         }
 
         public async Task<string> Update(int Id, User newUser)
         {
-            var user = await context.Users.FindAsync(Id);
-
-            if (user is null)
-            {
-                throw new MovieNotFoundException($"user {Id} - Not Found");
-            }
-
-            user.Name = newUser.Name;
-            user.Age = newUser.Age;
-            user.Email = newUser.Email;
-            user.Phone = newUser.Phone;
-            
-            await context.SaveChangesAsync();
-
+            var user = await _userStorage.Update(Id, newUser);
             return $"User: {user.Name} -  updated";
         }
     }

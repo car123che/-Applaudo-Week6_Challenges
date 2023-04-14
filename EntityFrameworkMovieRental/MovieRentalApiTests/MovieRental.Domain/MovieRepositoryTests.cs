@@ -59,7 +59,7 @@ namespace MovieRentalApiTests.MovieRental.Domain
         }
 
         [Test]
-        public async Task Post_WhenCalled_ReturnTag()
+        public async Task Post_WhenCalled_ReturnMovie()
         {
             var Movie = new EFMovieRentalDomain.Movie();
             _movieStorageMock.Setup(ts => ts.Post(Movie)).ReturnsAsync(new EFMovieRentalDomain.Movie());
@@ -70,7 +70,7 @@ namespace MovieRentalApiTests.MovieRental.Domain
         }
 
         [Test]
-        public async Task Delete_WhenCalled_DeleteATag()
+        public async Task Delete_WhenCalled_DeleteAMovie()
         {
             int movieId = 1;
             _movieStorageMock.Setup(ts => ts.Delete(movieId)).ReturnsAsync(new EFMovieRentalDomain.Movie());
@@ -81,7 +81,7 @@ namespace MovieRentalApiTests.MovieRental.Domain
         }
 
         [Test]
-        public async Task Update_WhenCalled_UpdateATag()
+        public async Task Update_WhenCalled_UpdateAMovie()
         {
             int movieId = 1;
             var Movie = new EFMovieRentalDomain.Movie();

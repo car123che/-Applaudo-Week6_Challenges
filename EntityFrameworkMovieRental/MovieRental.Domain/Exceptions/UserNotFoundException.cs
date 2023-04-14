@@ -12,5 +12,10 @@ namespace MovieRental.Domain.Exceptions
         {
             
         }
+
+        public UserNotFoundException()
+        {
+            
+        }
     }
 }

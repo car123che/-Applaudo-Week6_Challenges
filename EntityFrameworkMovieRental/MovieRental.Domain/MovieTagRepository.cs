@@ -7,10 +7,11 @@ using System.Threading.Tasks;
 using EFUnivestityRentalData;
 using Microsoft.EntityFrameworkCore;
 using EFMovieRentalDomain.Models;
+using MovieRental.Domain.Storage;
 
 namespace MovieRental.Domain
 {
-
+     
     public interface IMovieTagRepository
     {
         Task<string> Post(int movieId, int tagId);
@@ -23,68 +24,38 @@ namespace MovieRental.Domain
 
     public class MovieTagRepository : IMovieTagRepository
     {
-        private static MovieRentalContext context = new MovieRentalContext();
+        private readonly IMovieTagStorage _movieTagStorage;
+
+        public MovieTagRepository( IMovieTagStorage movieTagStorage)
+        {
+            _movieTagStorage = movieTagStorage;
+        }
 
         public async Task<string> Delete(int movieId, int tagId)
         {
-            await context.Database.ExecuteSqlRawAsync($"Delete from MovieTags  WHERE MovieId = {movieId} and TagId = {tagId}");
-            await context.SaveChangesAsync();
+            var result = await _movieTagStorage.Delete(movieId, tagId);
 
-            return "Tag eliminado correctamente";
+            return result;
         }
 
         public async Task<List<MovieTagsDetail>> GetMovieTagsByMovie(int moveiId)
         {
-            var movies = await context.MovieTags.Include(q => q.Movie).Select(
-                     q =>
-                     new MovieTagsDetail
-                     {
-                         Title = q.Movie.Title,
-                         Description = q.Movie.Description,
-                         PosterStock = q.Movie.PosterStock,
-                         TrailerLink = q.Movie.TrailerLink,
-                         SalePrice = q.Movie.SalePrice,
-                         Likes = q.Movie.Likes,
-                         Availability = q.Movie.Availability,
-                         TagName = q.Tag.Name,
-                         MovieId = q.MovieId,
-                         TagId = q.TagId
-                     }
-                 ).Where(q => q.MovieId == moveiId).ToListAsync();
-
+            var movies = await _movieTagStorage.GetMovieTagsByMovie(moveiId);
             return movies;
         }
 
         public async Task<List<MovieTagsDetail>> GetMovieTagsByTag(int tagId)
         {
-            var movies = await context.MovieTags.Include(q => q.Movie).Select(
-                     q =>
-                     new MovieTagsDetail
-                     {
-                         Title = q.Movie.Title,
-                         Description = q.Movie.Description,
-                         PosterStock = q.Movie.PosterStock,
-                         TrailerLink = q.Movie.TrailerLink,
-                         SalePrice = q.Movie.SalePrice,
-                         Likes = q.Movie.Likes,
-                         Availability = q.Movie.Availability,
-                         TagName = q.Tag.Name,
-                         MovieId = q.MovieId,
-                         TagId = q.TagId
-                     }
-                 ).Where(q => q.TagId == tagId).ToListAsync();
+            var movies = await _movieTagStorage.GetMovieTagsByTag(tagId);
 
             return movies;
         }
 
         public async Task<string> Post(int movieId, int tagId)
         {
-            var movieTag = new EFMovieRentalDomain.MovieTag() { MovieId = movieId, TagId = tagId };
-            await context.AddAsync(movieTag);
+            var result = await _movieTagStorage.Post(movieId, tagId);
 
-            await context.SaveChangesAsync();
-
-            return "Tag agregado correctamente";
+            return result;
         }
 
 

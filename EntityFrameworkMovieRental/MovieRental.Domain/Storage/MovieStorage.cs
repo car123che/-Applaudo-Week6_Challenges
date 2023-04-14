@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+ 
 namespace MovieRental.Domain.Storage
 {
     public interface IMovieStorage
@@ -21,7 +21,7 @@ namespace MovieRental.Domain.Storage
 
     public class MovieStorage : IMovieStorage
     {
-        private static MovieRentalContext context = new MovieRentalContext();
+        private  MovieRentalContext context = new MovieRentalContext();
 
         public async Task<Movie> Delete(int Id)
         {
