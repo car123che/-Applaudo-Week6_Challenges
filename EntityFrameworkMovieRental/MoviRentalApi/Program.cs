@@ -1,5 +1,6 @@
 using MoviRentalApi;
 using MovieRental.Domain;
+using MovieRental.Domain.Storage;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,6 +11,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddTransient<ITagRepository, TagRepository>();
+builder.Services.AddTransient<ITagStorage, TagStorage>();
 builder.Services.AddTransient<IMovieRepository, MovieRepository>();
 builder.Services.AddTransient<IMovieTagRepository, MovieTagRepository>();
 builder.Services.AddTransient<IUserRepository, UserRepository>();
